@@ -165,7 +165,7 @@ export const createApplication = asyncHandler(async (req, res) => {
 
 /**
  * GET /api/applications/:applicationId
- * Safe Public Status Tracking
+ * Safe Public Status Tracking (Includes Attached Documents & Real-Time Status)
  */
 export const trackApplication = asyncHandler(async (req, res) => {
   const { applicationId } = req.params;
@@ -181,7 +181,7 @@ export const trackApplication = asyncHandler(async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('applications')
-      .select('application_id, status, payment_status, created_at, updated_at, services(title)')
+      .select('application_id, status, payment_status, created_at, updated_at, services(title), application_documents(id, document_type, file_name, created_at)')
       .eq('application_id', formattedId)
       .single();
 
@@ -192,6 +192,13 @@ export const trackApplication = asyncHandler(async (req, res) => {
       });
     }
 
+    const documentsList = (data.application_documents || []).map(d => ({
+      id: d.id,
+      documentType: d.document_type || 'Attached Proof Document',
+      fileName: d.file_name,
+      createdAt: d.created_at
+    }));
+
     return res.status(200).json({
       success: true,
       data: {
@@ -200,7 +207,8 @@ export const trackApplication = asyncHandler(async (req, res) => {
         status: data.status,
         paymentStatus: data.payment_status,
         createdAt: data.created_at,
-        updatedAt: data.updated_at
+        updatedAt: data.updated_at,
+        documents: documentsList
       }
     });
   } catch (err) {
