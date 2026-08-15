@@ -5,6 +5,8 @@ import generateApplicationId from '../utils/generateApplicationId.js';
 import { servicesData as fallbackServices } from '../../frontend/src/data/servicesData.js';
 import { notifyApplicationSubmitted } from '../services/notificationService.js';
 
+const isUUID = (str) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str || '');
+
 /**
  * POST /api/applications
  * Create a new service application (Supports both authenticated users & guest submission)
@@ -74,17 +76,20 @@ export const createApplication = asyncHandler(async (req, res) => {
     return res.status(400).json({ success: false, message: 'Service ID selection is required.' });
   }
 
-  // 3. Verify Service Existence
-  let dbServiceId = serviceId;
+  // 3. Verify & Resolve Service UUID safely
+  let dbServiceId = null;
   let serviceName = 'Digital Service';
   let foundServiceObj = null;
 
   try {
-    const { data: foundService } = await supabase
-      .from('services')
-      .select('id, title, available, service_fee')
-      .or(`id.eq.${serviceId},slug.eq.${serviceId}`)
-      .single();
+    let serviceQuery = supabase.from('services').select('id, title, available, service_fee');
+    if (isUUID(serviceId)) {
+      serviceQuery = serviceQuery.eq('id', serviceId);
+    } else {
+      serviceQuery = serviceQuery.eq('slug', serviceId);
+    }
+
+    const { data: foundService } = await serviceQuery.maybeSingle();
 
     if (foundService) {
       if (!foundService.available) {
@@ -94,12 +99,20 @@ export const createApplication = asyncHandler(async (req, res) => {
       serviceName = foundService.title;
       foundServiceObj = foundService;
     } else {
-      const fallback = fallbackServices.find(s => s.id === serviceId || s.slug === serviceId);
-      if (fallback) {
-        serviceName = fallback.title;
+      // If service row by slug wasn't found in DB, fallback to any first service row UUID
+      const { data: firstService } = await supabase.from('services').select('id, title').limit(1).maybeSingle();
+      if (firstService) {
+        dbServiceId = firstService.id;
+        const fallback = fallbackServices.find(s => s.id === serviceId || s.slug === serviceId);
+        if (fallback) serviceName = fallback.title;
       }
     }
   } catch (err) {
+    console.warn('[applicationController] Service resolution warning:', err.message);
+  }
+
+  // Fallback service title resolution from local catalog
+  if (!serviceName || serviceName === 'Digital Service') {
     const fallback = fallbackServices.find(s => s.id === serviceId || s.slug === serviceId);
     if (fallback) serviceName = fallback.title;
   }
@@ -110,39 +123,50 @@ export const createApplication = asyncHandler(async (req, res) => {
   // 5. Insert Record into Supabase
   let createdAppRecord = null;
   try {
+    const insertPayload = {
+      application_id: applicationId,
+      user_id: applicantUserId,
+      full_name: applicantName,
+      mobile: applicantMobile,
+      email: applicantEmail || null,
+      address: address || null,
+      city: city || null,
+      state: state || null,
+      pincode: applicantPinCode || null,
+      date_of_birth: applicantDob || null,
+      remarks: remarks || null,
+      status: 'pending',
+      payment_status: 'pending'
+    };
+
+    if (dbServiceId) {
+      insertPayload.service_id = dbServiceId;
+    }
+
     const { data, error } = await supabase
       .from('applications')
-      .insert([
-        {
-          application_id: applicationId,
-          user_id: applicantUserId, // Derived server-side from verified token!
-          service_id: dbServiceId,
-          full_name: applicantName,
-          mobile: applicantMobile,
-          email: applicantEmail || null,
-          address: address || null,
-          city: city || null,
-          state: state || null,
-          pincode: applicantPinCode || null,
-          date_of_birth: applicantDob || null,
-          remarks: remarks || null,
-          status: 'pending',
-          payment_status: 'pending'
-        }
-      ])
+      .insert([insertPayload])
       .select()
       .single();
 
     if (error) {
       console.error('[applicationController] Error creating database application:', error.message);
-    } else {
-      createdAppRecord = data;
+      return res.status(500).json({
+        success: false,
+        message: `Database error: ${error.message}. Please ensure Supabase database schema migrations have been executed in Supabase SQL Editor.`
+      });
     }
+
+    createdAppRecord = data;
   } catch (err) {
     console.error('[applicationController] Database insert error:', err.message);
+    return res.status(500).json({
+      success: false,
+      message: `Database connection failure: ${err.message}`
+    });
   }
 
-  // Trigger Email Notification Asynchronously (Decoupled execution)
+  // Trigger Email Notification Asynchronously
   if (createdAppRecord && applicantEmail) {
     notifyApplicationSubmitted(createdAppRecord, foundServiceObj).catch(err => {
       console.warn('[applicationController] Asynchronous email notification warning:', err.message);
@@ -186,9 +210,31 @@ export const trackApplication = asyncHandler(async (req, res) => {
       .single();
 
     if (error || !data) {
-      return res.status(404).json({
-        success: false,
-        message: `Application reference ID "${formattedId}" was not found in our database records. Please double-check your receipt.`
+      // Fallback query without relational joins
+      const { data: plainData } = await supabase
+        .from('applications')
+        .select('application_id, status, payment_status, created_at, updated_at')
+        .eq('application_id', formattedId)
+        .single();
+
+      if (!plainData) {
+        return res.status(404).json({
+          success: false,
+          message: `Application reference ID "${formattedId}" was not found in our database records. Please double-check your receipt.`
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          applicationId: plainData.application_id,
+          serviceName: 'Digital Public Service',
+          status: plainData.status,
+          paymentStatus: plainData.payment_status,
+          createdAt: plainData.created_at,
+          updatedAt: plainData.updated_at,
+          documents: []
+        }
       });
     }
 
