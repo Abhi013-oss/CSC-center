@@ -2,7 +2,7 @@ import asyncHandler from '../middleware/asyncHandler.js';
 
 // Centralized Allowlisted Public Business Settings
 const publicSettings = {
-  centerName: 'CSC Assistance & Digital Service Center',
+  centerName: 'Maa Vindhyawasini Online Centre',
   phone: '+91 9876543210',
   email: 'support@csccenter.in',
   address: 'Shop No. 12, Main Market Road, Near Bus Stand',

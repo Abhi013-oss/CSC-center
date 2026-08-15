@@ -51,7 +51,7 @@ const Navbar = () => {
             {!imgError ? (
               <img
                 src="/logo.png"
-                alt="CSC Center Logo"
+                alt="Maa Vindhyawasini Online Centre Logo"
                 className="h-10 w-auto object-contain"
                 onError={() => setImgError(true)}
               />
@@ -61,8 +61,8 @@ const Navbar = () => {
               </div>
             )}
             <div className="flex flex-col">
-              <span className="font-extrabold text-slate-900 text-lg sm:text-xl tracking-tight flex items-center gap-1.5 leading-none">
-                CSC CENTER
+              <span className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight flex items-center gap-1.5 leading-none">
+                Maa Vindhyawasini Online Centre
               </span>
               <span className="text-[11px] text-slate-500 font-medium tracking-wide">
                 Digital Service Assistance

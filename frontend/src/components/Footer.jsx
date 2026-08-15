@@ -5,7 +5,7 @@ import { getPublicSettings } from '../services/api';
 
 const Footer = () => {
   const [settings, setSettings] = useState({
-    centerName: 'CSC Assistance & Digital Service Center',
+    centerName: 'Maa Vindhyawasini Online Centre',
     phone: '+91 9876543210',
     email: 'support@csccenter.in',
     address: 'Shop No. 12, Main Market Road, Near Bus Stand',
@@ -36,7 +36,7 @@ const Footer = () => {
                 <Shield className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-white text-lg tracking-tight leading-none">CSC CENTER</span>
+                <span className="font-extrabold text-white text-base sm:text-lg tracking-tight leading-none">Maa Vindhyawasini Online Centre</span>
                 <span className="text-[11px] text-slate-400 font-medium">Digital Service Assistance</span>
               </div>
             </Link>
@@ -96,7 +96,7 @@ const Footer = () => {
 
         </div>
 
-        {/* Clear Disclaimer (Requirement 6 & 44) */}
+        {/* Clear Disclaimer */}
         <div className="p-4 bg-slate-800/60 rounded-2xl border border-slate-800 text-[11px] text-slate-400 space-y-1">
           <p className="font-bold text-slate-300">Important Disclaimer:</p>
           <p>
