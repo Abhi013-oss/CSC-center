@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /services
+Allow: /services/
+Allow: /contact
+Allow: /faq
+Allow: /notices
+Allow: /privacy-policy
+Allow: /terms
+Allow: /refund-policy
+Allow: /track
+
+Disallow: /admin/
+Disallow: /account/
+Disallow: /my-applications/
+Disallow: /my-payments/
+Disallow: /payment/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+Sitemap: https://csccenter.in/sitemap.xml
