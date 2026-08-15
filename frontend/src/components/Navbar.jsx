@@ -26,14 +26,19 @@ const Navbar = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Streamlined Essential Navigation Links
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Services', path: '/services' },
     { name: 'Track Application', path: '/track' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
+  // Secondary Links for Mobile Drawer
+  const mobileSecondaryLinks = [
     { name: 'Notices', path: '/notices' },
     { name: 'FAQ', path: '/faq' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'About Us', path: '/about' },
   ];
 
   return (
@@ -42,7 +47,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Logo / Branding */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
             {!imgError ? (
               <img
                 src="/logo.png"
@@ -65,14 +70,14 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Desktop Streamlined Essential Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                  `px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${
                     isActive
                       ? 'text-indigo-600 bg-indigo-50/80 font-bold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -85,7 +90,7 @@ const Navbar = () => {
           </nav>
 
           {/* Desktop Right CTA Actions */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <Link
@@ -114,14 +119,14 @@ const Navbar = () => {
               </Link>
             )}
 
-            <Link to="/services" className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4">
+            <Link to="/services" className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-sm">
               <span>Apply Now</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           {/* Mobile Hamburger Button */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none cursor-pointer"
@@ -142,7 +147,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="lg:hidden border-t border-slate-200 bg-white shadow-xl overflow-hidden"
+            className="md:hidden border-t border-slate-200 bg-white shadow-xl overflow-hidden"
           >
             <div className="px-4 pt-3 pb-6 space-y-2">
               {navLinks.map((link) => (
@@ -150,9 +155,9 @@ const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
-                    `block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                    `block px-4 py-2.5 rounded-lg text-base font-semibold transition-colors ${
                       isActive
-                        ? 'text-indigo-600 bg-indigo-50 font-semibold'
+                        ? 'text-indigo-600 bg-indigo-50 font-bold'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`
                   }
@@ -160,6 +165,18 @@ const Navbar = () => {
                   {link.name}
                 </NavLink>
               ))}
+
+              <div className="pt-2 border-t border-slate-100">
+                {mobileSecondaryLinks.map((link) => (
+                  <NavLink
+                    key={link.path}
+                    to={link.path}
+                    className="block px-4 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 font-medium"
+                  >
+                    {link.name}
+                  </NavLink>
+                ))}
+              </div>
 
               <div className="pt-4 border-t border-slate-100 flex flex-col gap-2.5">
                 {isAuthenticated ? (
