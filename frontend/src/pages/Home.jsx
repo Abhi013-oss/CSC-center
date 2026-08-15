@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import NoticeBar from '../components/NoticeBar';
 import Hero from '../components/Hero';
 import Stats from '../components/Stats';
@@ -21,6 +22,25 @@ import {
   PhoneCall
 } from 'lucide-react';
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 35 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.5, ease: 'easeOut' }
+};
+
+const staggerContainer = {
+  initial: {},
+  whileInView: { transition: { staggerChildren: 0.12 } },
+  viewport: { once: true, margin: '-60px' }
+};
+
+const cardItem = {
+  initial: { opacity: 0, y: 25 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.45, ease: 'easeOut' }
+};
+
 const Home = () => {
   return (
     <div className="flex flex-col min-h-screen">
@@ -38,7 +58,10 @@ const Home = () => {
       <section className="py-16 sm:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <motion.div
+            {...fadeInUp}
+            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+          >
             <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest bg-indigo-100/80 px-3 py-1 rounded-full border border-indigo-200">
               Our Services
             </span>
@@ -48,7 +71,7 @@ const Home = () => {
             <p className="text-slate-600 text-base mt-3">
               Get expert assistance with commonly requested online applications, certificates, and document services.
             </p>
-          </div>
+          </motion.div>
 
           <ServiceGrid featuredOnly={true} />
 
@@ -59,7 +82,10 @@ const Home = () => {
       <section className="py-16 sm:py-24 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <motion.div
+            {...fadeInUp}
+            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+          >
             <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest bg-indigo-100/80 px-3 py-1 rounded-full border border-indigo-200">
               Simple Step Workflow
             </span>
@@ -69,12 +95,18 @@ const Home = () => {
             <p className="text-slate-600 text-base mt-3">
               We streamline complex government and online forms into a clear four-step process.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true, margin: '-60px' }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative"
+          >
             
             {/* Step 1 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-shadow">
+            <motion.div variants={cardItem} className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-all hover:-translate-y-1">
               <div className="w-12 h-12 rounded-xl bg-indigo-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-indigo-600/20">
                 01
               </div>
@@ -82,10 +114,10 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Select from our wide range of services including PAN, certificates, job forms, or education portals.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 2 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-shadow">
+            <motion.div variants={cardItem} className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-all hover:-translate-y-1">
               <div className="w-12 h-12 rounded-xl bg-indigo-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-indigo-600/20">
                 02
               </div>
@@ -93,10 +125,10 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Fill in the essential applicant information in our simplified digital form or visit our center.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 3 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-shadow">
+            <motion.div variants={cardItem} className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-all hover:-translate-y-1">
               <div className="w-12 h-12 rounded-xl bg-indigo-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-indigo-600/20">
                 03
               </div>
@@ -104,10 +136,10 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Provide clean copies of mandatory ID proofs, photos, and certificates for verification.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 4 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-shadow">
+            <motion.div variants={cardItem} className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 relative space-y-4 hover:shadow-md transition-all hover:-translate-y-1">
               <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-emerald-600/20">
                 04
               </div>
@@ -115,9 +147,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Receive your unique application reference ID to track status updates through our portal.
               </p>
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -126,7 +158,10 @@ const Home = () => {
       <section className="py-16 sm:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <motion.div
+            {...fadeInUp}
+            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+          >
             <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest bg-indigo-100/80 px-3 py-1 rounded-full border border-indigo-200">
               Trusted Excellence
             </span>
@@ -136,11 +171,17 @@ const Home = () => {
             <p className="text-slate-600 text-base mt-3">
               We prioritize accuracy, applicant privacy, and guidance to ensure your applications succeed without delays.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true, margin: '-60px' }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                 <CheckSquare className="w-5 h-5" />
               </div>
@@ -148,9 +189,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 No need to decipher complex government portal layouts. We simplify input steps for quick submission.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
                 <FileText className="w-5 h-5" />
               </div>
@@ -158,9 +199,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 We double-check file dimensions, signature sizes, and photo guidelines before uploading to portals.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <SearchCheck className="w-5 h-5" />
               </div>
@@ -168,9 +209,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Get application reference details so you can monitor progress and receipt status anytime.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
                 <Clock className="w-5 h-5" />
               </div>
@@ -178,9 +219,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Clear estimated timelines and fee breakdowns for every service before application submission.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                 <Headphones className="w-5 h-5" />
               </div>
@@ -188,9 +229,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Visit our physical center or call our helpline whenever you need help with technical portal errors.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-colors">
+            <motion.div variants={cardItem} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 hover:border-indigo-300 transition-all hover:-translate-y-1 hover:shadow-md">
               <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
                 <Lock className="w-5 h-5" />
               </div>
@@ -198,9 +239,9 @@ const Home = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 Your personal IDs and photos are protected with strict privacy standards and confidential handling.
               </p>
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -209,7 +250,10 @@ const Home = () => {
       <section className="py-16 sm:py-20 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+          <motion.div
+            {...fadeInUp}
+            className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden"
+          >
             
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
@@ -271,14 +315,14 @@ const Home = () => {
 
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
       </section>
 
       {/* 8. Track Application CTA Section */}
       <section className="py-16 bg-slate-100 border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
+        <motion.div {...fadeInUp} className="max-w-4xl mx-auto px-4 text-center space-y-6">
           <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest bg-indigo-100 px-3 py-1 rounded-full border border-indigo-200">
             Status Desk
           </span>
@@ -297,7 +341,7 @@ const Home = () => {
               <span>Track Application Status</span>
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* 9. Contact Section */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   CreditCard,
   Fingerprint,
@@ -38,7 +39,14 @@ const ServiceCard = ({ service }) => {
   const IconComponent = iconMap[service.iconName] || Grid;
 
   return (
-    <div className="group card-base p-5 sm:p-6 flex flex-col justify-between hover:border-indigo-300 hover:shadow-lg transition-all duration-300 relative overflow-hidden bg-white">
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className="group card-base p-5 sm:p-6 flex flex-col justify-between hover:border-indigo-300 hover:shadow-lg transition-all duration-300 relative overflow-hidden bg-white"
+    >
       
       {/* Top Tag & Availability */}
       <div>
@@ -99,7 +107,7 @@ const ServiceCard = ({ service }) => {
         </Link>
       </div>
 
-    </div>
+    </motion.div>
   );
 };
 

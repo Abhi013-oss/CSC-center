@@ -1,13 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Layers, FileCheck2, Zap, Calendar } from 'lucide-react';
 
-/**
- * Stats Component
- * 
- * NOTE FOR PHASE 2/4 BACKEND INTEGRATION:
- * The stats figures below (e.g., categories count, applications assisted) are temporary UI display values.
- * In Phase 4, replace these static props with live metrics fetched from the Express API endpoint `/api/stats`.
- */
 const Stats = () => {
   const statsList = [
     {
@@ -47,13 +41,24 @@ const Stats = () => {
   return (
     <section className="py-12 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+        <motion.div
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ staggerChildren: 0.1 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8"
+        >
           {statsList.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div
+              <motion.div
                 key={stat.id}
-                className="p-5 rounded-xl bg-slate-50/70 border border-slate-200/80 hover:bg-white hover:shadow-md transition-all duration-200"
+                variants={{
+                  initial: { opacity: 0, y: 20 },
+                  whileInView: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="p-5 rounded-xl bg-slate-50/70 border border-slate-200/80 hover:bg-white hover:shadow-md transition-all duration-200 hover:-translate-y-1"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`p-2.5 rounded-lg border ${stat.color}`}>
@@ -67,10 +72,10 @@ const Stats = () => {
                   <h4 className="text-sm font-bold text-slate-800">{stat.label}</h4>
                   <p className="text-xs text-slate-500 mt-0.5">{stat.description}</p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
