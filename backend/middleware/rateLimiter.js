@@ -35,3 +35,12 @@ export const paymentLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, message: 'Payment transaction creation rate limit exceeded. Please try again later.' }
 });
+
+// 5. Application Submission Rate Limiter
+export const applicationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Application submission rate limit exceeded. Please try again later.' }
+});

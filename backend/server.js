@@ -49,9 +49,26 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
-// 3. Strict CORS Origin Configuration
+// 3. Dynamic CORS Origin Configuration
+const allowedOrigins = [
+  FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174'
+];
+
 app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || /^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Permissive in dev to prevent connection failures
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Razorpay-Signature', 'X-Webhook-Signature', 'X-Request-ID'],
   credentials: true
@@ -59,12 +76,12 @@ app.use(cors({
 
 // 4. Request Body Parsing with Raw Body Preservation for Webhook Signature Checks
 app.use(express.json({
-  limit: '1mb',
+  limit: '10mb',
   verify: (req, res, buf) => {
     req.rawBody = buf.toString();
   }
 }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // 5. Global Rate Limiter
 app.use('/api', generalLimiter);

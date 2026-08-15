@@ -124,12 +124,21 @@ export const uploadUserDocument = async (applicationId, file, documentType = 'ge
   formData.append('document', file);
   formData.append('documentType', documentType);
 
-  const response = await api.post(`/my-applications/${applicationId}/documents`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+  try {
+    const response = await api.post(`/applications/${applicationId}/documents`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (err) {
+    const response = await api.post(`/my-applications/${applicationId}/documents`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
 };
 
 export const getSignedDocumentUrl = async (applicationId, documentId) => {
