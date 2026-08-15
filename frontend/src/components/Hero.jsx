@@ -25,7 +25,7 @@ const Hero = () => {
             {/* Eyebrow Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
               <ShieldCheck className="w-4 h-4 text-indigo-400" />
-              <span>Digital Service Center</span>
+              <span>DIGITAL SEVA KENDRA</span>
             </div>
 
             {/* Headline */}
